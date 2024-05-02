@@ -15,6 +15,7 @@
 #define PING           'p'
 #define RESET_ENCODERS 'r'
 #define SERVO_WRITE    's'
+#define STEER          'h'
 #define SERVO_READ     't'
 #define UPDATE_PID     'u'
 #define DIGITAL_WRITE  'w'

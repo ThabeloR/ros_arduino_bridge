@@ -66,8 +66,8 @@
    #define L298_MOTOR_DRIVER
 #endif
 
-//#define USE_SERVOS  // Enable use of PWM servos as defined in servos.h
-#undef USE_SERVOS     // Disable use of PWM servos
+#define USE_SERVOS  // Enable use of PWM servos as defined in servos.h
+//#undef USE_SERVOS     // Disable use of PWM servos
 
 /* Serial port baud rate */
 #define BAUDRATE     57600
@@ -189,6 +189,15 @@ int runCommand() {
   case SERVO_WRITE:
     servos[arg1].setTargetPosition(arg2);
     Serial.println("OK");
+    break;
+  case STEER:
+    // Ensure turning radius is non-zero (avoid division by zero)
+    if (arg2 == 0) {
+        Serial.println("Error: Turning radius cannot be zero");
+    } else {
+        setServoAnglesForSteering(arg1, arg2);
+        Serial.println("OK");
+    }
     break;
   case SERVO_READ:
     Serial.println(servos[arg1].getServo().read());
@@ -342,8 +351,8 @@ void loop() {
   
   // Check to see if we have exceeded the auto-stop interval
   if ((millis() - lastMotorCommand) > AUTO_STOP_INTERVAL) {;
-    setMotorSpeeds(0, 0);
-    moving = 0;
+    //setMotorSpeeds(0, 0);
+    //moving = 0;
   }
 #endif
 

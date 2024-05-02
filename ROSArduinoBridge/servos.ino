@@ -11,7 +11,16 @@
 
 #ifdef USE_SERVOS
 
+// Constants
+const int MAX_STEERING_ANGLE = 45; // Maximum angle for inner wheel
+const float WHEELBASE = 65.0;   
+const float TRACK_WIDTH = 63.5; 
 
+// Servo Objects (Assumes you have four defined)
+const int FRONT_LEFT_STEERING_SERVO = 1; 
+const int FRONT_RIGHT_STEERING_SERVO = 2;
+const int REAR_LEFT_STEERING_SERVO = 3;
+const int REAR_RIGHT_STEERING_SERVO = 0;  
 // Constructor
 SweepServo::SweepServo()
 {
@@ -65,6 +74,47 @@ void SweepServo::doSweep()
 void SweepServo::setTargetPosition(int position)
 {
   this->targetPositionDegrees = position;
+  Serial.println("Done");
+}
+
+// Ackermann Steering Calculation Function
+void setServoAnglesForSteering(float steeringInput, float turningRadius) {
+  // Simplified Ackermann Calculation (adjust based on your setup)
+  float innerAngleRadians = atan2(WHEELBASE, (turningRadius - TRACK_WIDTH/2)); 
+  float outerAngleRadians = atan2(WHEELBASE, (turningRadius + TRACK_WIDTH/2));
+  float innerAngle = innerAngleRadians * 180.0f / PI;
+  float outerAngle = outerAngleRadians * 180.0f / PI;
+ 
+  // Apply Steering Logic with Ackermann
+  int frontLeftServoAngle, frontRightServoAngle, rearLeftServoAngle, rearRightServoAngle;
+
+  if (steeringInput > 0) { // Right Turn
+    frontLeftServoAngle = map(outerAngle, -MAX_STEERING_ANGLE, MAX_STEERING_ANGLE, 25, 155); 
+    frontRightServoAngle = map(innerAngle, -MAX_STEERING_ANGLE, MAX_STEERING_ANGLE, 25, 155);
+
+    // Adjust rear angles as required
+    rearLeftServoAngle = map(-innerAngle/ 2.0f , -MAX_STEERING_ANGLE / 2, MAX_STEERING_ANGLE / 2, 25, 155);
+    rearRightServoAngle = map(-outerAngle / 2.0f , -MAX_STEERING_ANGLE / 2, MAX_STEERING_ANGLE / 2, 25, 155); 
+
+  } else if (steeringInput < 0) { // Left Turn
+    // Similar logic as right turn, with inverted angles for inner and outer wheels
+    frontLeftServoAngle = map(-outerAngle, -MAX_STEERING_ANGLE, MAX_STEERING_ANGLE, 25, 155); 
+    frontRightServoAngle = map(-innerAngle, -MAX_STEERING_ANGLE, MAX_STEERING_ANGLE, 25, 155);
+
+    // Adjust rear angles as required
+    rearLeftServoAngle = map(innerAngle/ 2.0f  , -MAX_STEERING_ANGLE / 2, MAX_STEERING_ANGLE / 2, 25, 155);
+    rearRightServoAngle = map(outerAngle/ 2.0f  , -MAX_STEERING_ANGLE / 2, MAX_STEERING_ANGLE / 2, 25, 155); 
+    // ...
+  } else { 
+    // ... Set all servos to center for straight steering 
+    frontLeftServoAngle = frontRightServoAngle = rearLeftServoAngle = rearRightServoAngle = 90;
+  }
+
+  // Apply calculated angles to servos
+  servos[FRONT_LEFT_STEERING_SERVO].setTargetPosition(frontLeftServoAngle);
+  servos[FRONT_RIGHT_STEERING_SERVO].setTargetPosition(frontRightServoAngle);
+  servos[REAR_LEFT_STEERING_SERVO].setTargetPosition(rearLeftServoAngle);
+  servos[REAR_RIGHT_STEERING_SERVO].setTargetPosition(rearRightServoAngle);
 }
 
 

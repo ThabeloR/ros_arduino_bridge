@@ -49,7 +49,7 @@
     if (i == LEFT) drive.setM1Speed(spd);
     else drive.setM2Speed(spd);
   }
-
+  
   // A convenience function for setting both motor speeds
   void setMotorSpeeds(int leftSpeed, int rightSpeed) {
     setMotorSpeed(LEFT, leftSpeed);
@@ -57,11 +57,17 @@
   }
 #elif defined L298_MOTOR_DRIVER
   void initMotorController() {
-    digitalWrite(RIGHT_MOTOR_ENABLE, HIGH);
-    digitalWrite(LEFT_MOTOR_ENABLE, HIGH);
+    digitalWrite(FRONT_RIGHT_MOTOR_ENABLE, HIGH);
+    digitalWrite(FRONT_LEFT_MOTOR_ENABLE, HIGH);
+    digitalWrite(MID_RIGHT_MOTOR_ENABLE, HIGH);
+    digitalWrite(MID_LEFT_MOTOR_ENABLE, HIGH);
+    digitalWrite(BACK_RIGHT_MOTOR_ENABLE, HIGH);
+    digitalWrite(BACK_LEFT_MOTOR_ENABLE, HIGH);
+    Serial.println("ALL SET");
   }
   
   void setMotorSpeed(int i, int spd) {
+    Serial.println("RUN");
     unsigned char reverse = 0;
   
     if (spd < 0)
@@ -73,12 +79,30 @@
       spd = 255;
     
     if (i == LEFT) { 
-      if      (reverse == 0) { analogWrite(LEFT_MOTOR_FORWARD, spd); analogWrite(LEFT_MOTOR_BACKWARD, 0); }
-      else if (reverse == 1) { analogWrite(LEFT_MOTOR_BACKWARD, spd); analogWrite(LEFT_MOTOR_FORWARD, 0); }
+      if      (reverse == 0) { analogWrite(FRONT_LEFT_MOTOR_FORWARD, spd); analogWrite(FRONT_LEFT_MOTOR_BACKWARD, 0);
+                               analogWrite(MID_LEFT_MOTOR_FORWARD, spd); analogWrite(MID_LEFT_MOTOR_BACKWARD, 0);
+                               analogWrite(BACK_LEFT_MOTOR_FORWARD, spd); analogWrite(BACK_LEFT_MOTOR_BACKWARD, 0);
+                               
+                               Serial.println("Done");}
+
+      else if (reverse == 1) { analogWrite(FRONT_LEFT_MOTOR_BACKWARD, spd); analogWrite(FRONT_LEFT_MOTOR_FORWARD, 0); 
+                               analogWrite(MID_LEFT_MOTOR_BACKWARD, spd); analogWrite(MID_LEFT_MOTOR_FORWARD, 0);
+                               analogWrite(BACK_LEFT_MOTOR_BACKWARD, spd); analogWrite(BACK_LEFT_MOTOR_FORWARD, 0);
+                               
+                               Serial.println("Done");}
     }
     else /*if (i == RIGHT) //no need for condition*/ {
-      if      (reverse == 0) { analogWrite(RIGHT_MOTOR_FORWARD, spd); analogWrite(RIGHT_MOTOR_BACKWARD, 0); }
-      else if (reverse == 1) { analogWrite(RIGHT_MOTOR_BACKWARD, spd); analogWrite(RIGHT_MOTOR_FORWARD, 0); }
+      if      (reverse == 0) { analogWrite(FRONT_RIGHT_MOTOR_FORWARD, spd); analogWrite(FRONT_RIGHT_MOTOR_BACKWARD, 0); 
+                               analogWrite(MID_RIGHT_MOTOR_FORWARD, spd); analogWrite(MID_RIGHT_MOTOR_BACKWARD, 0); 
+                               analogWrite(BACK_RIGHT_MOTOR_FORWARD, spd); analogWrite(BACK_RIGHT_MOTOR_BACKWARD, 0); 
+                               
+                               Serial.println("Done");}
+
+      else if (reverse == 1) { analogWrite(FRONT_RIGHT_MOTOR_BACKWARD, spd); analogWrite(FRONT_RIGHT_MOTOR_FORWARD, 0); 
+                               analogWrite(MID_RIGHT_MOTOR_BACKWARD, spd); analogWrite(MID_RIGHT_MOTOR_FORWARD, 0);
+                               analogWrite(BACK_RIGHT_MOTOR_BACKWARD, spd); analogWrite(BACK_RIGHT_MOTOR_FORWARD, 0);
+                               
+                               }
     }
   }
   
