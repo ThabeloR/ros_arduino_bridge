@@ -84,9 +84,6 @@
 /* Include definition of serial commands */
 #include "commands.h"
 
-/* Sensor functions */
-#include "sensors.h"
-
 /* Include servo support if required */
 #ifdef USE_SERVOS
    #include <Servo.h>
@@ -183,7 +180,7 @@ int runCommand() {
     Serial.println("OK");
     break;
   case PING:
-    Serial.println(Ping(arg1));
+    Serial.println((arg1));
     break;
 #ifdef USE_SERVOS
   case SERVO_WRITE:

@@ -70,11 +70,10 @@ void SweepServo::doSweep()
 }
 
 
-// Set a new target position
+// Set a new target position  `1
 void SweepServo::setTargetPosition(int position)
 {
   this->targetPositionDegrees = position;
-  Serial.println("Done");
 }
 
 // Ackermann Steering Calculation Function

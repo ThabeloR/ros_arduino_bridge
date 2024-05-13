@@ -63,11 +63,9 @@
     digitalWrite(MID_LEFT_MOTOR_ENABLE, HIGH);
     digitalWrite(BACK_RIGHT_MOTOR_ENABLE, HIGH);
     digitalWrite(BACK_LEFT_MOTOR_ENABLE, HIGH);
-    Serial.println("ALL SET");
   }
   
   void setMotorSpeed(int i, int spd) {
-    Serial.println("RUN");
     unsigned char reverse = 0;
   
     if (spd < 0)
@@ -82,21 +80,18 @@
       if      (reverse == 0) { analogWrite(FRONT_LEFT_MOTOR_FORWARD, spd); analogWrite(FRONT_LEFT_MOTOR_BACKWARD, 0);
                                analogWrite(MID_LEFT_MOTOR_FORWARD, spd); analogWrite(MID_LEFT_MOTOR_BACKWARD, 0);
                                analogWrite(BACK_LEFT_MOTOR_FORWARD, spd); analogWrite(BACK_LEFT_MOTOR_BACKWARD, 0);
-                               
-                               Serial.println("Done");}
+                               }
 
       else if (reverse == 1) { analogWrite(FRONT_LEFT_MOTOR_BACKWARD, spd); analogWrite(FRONT_LEFT_MOTOR_FORWARD, 0); 
                                analogWrite(MID_LEFT_MOTOR_BACKWARD, spd); analogWrite(MID_LEFT_MOTOR_FORWARD, 0);
                                analogWrite(BACK_LEFT_MOTOR_BACKWARD, spd); analogWrite(BACK_LEFT_MOTOR_FORWARD, 0);
-                               
-                               Serial.println("Done");}
+                               }
     }
     else /*if (i == RIGHT) //no need for condition*/ {
       if      (reverse == 0) { analogWrite(FRONT_RIGHT_MOTOR_FORWARD, spd); analogWrite(FRONT_RIGHT_MOTOR_BACKWARD, 0); 
                                analogWrite(MID_RIGHT_MOTOR_FORWARD, spd); analogWrite(MID_RIGHT_MOTOR_BACKWARD, 0); 
                                analogWrite(BACK_RIGHT_MOTOR_FORWARD, spd); analogWrite(BACK_RIGHT_MOTOR_BACKWARD, 0); 
-                               
-                               Serial.println("Done");}
+                               }
 
       else if (reverse == 1) { analogWrite(FRONT_RIGHT_MOTOR_BACKWARD, spd); analogWrite(FRONT_RIGHT_MOTOR_FORWARD, 0); 
                                analogWrite(MID_RIGHT_MOTOR_BACKWARD, spd); analogWrite(MID_RIGHT_MOTOR_FORWARD, 0);
